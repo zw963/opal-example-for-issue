@@ -1,0 +1,62 @@
+.center-wrapper.form
+  = form_tag xxx_www_publish_goods_items_path, method: :post, id: 'js_xxx_www_publish_goods_item_form', remote: true do
+    .field
+      label = t('xxx_www.通用.上传图片')
+      .input
+        = render 'qiniu_uploader'
+    .field
+      label = t('xxx_www.通用.简单描述')
+      .input
+        textarea name="title"
+    .field.left
+      label = t('xxx_www.通用.联系电话')
+      .input
+        input type="number" name="phone_number"
+    .field.right
+      label = t('xxx_www.通用.个人可见')
+      .input
+        input type="radio" id="phone_ok" name="mmt-phone"
+        label for='phone_ok' Yes
+        input type="radio" id="phone_no" name="mmt-phone" checked='checked'
+        label for='phone_no' No
+    .field.left
+      label = t('xxx_www.通用.价格')
+      .input
+        input type="number" name="price"
+    .field.right
+      label = t('xxx_www.通用.允许议价')
+      .input
+        input type="radio" id="make_offer_ok" name="make-offer" checked='checked'
+        label for='make_offer_ok' Yes
+        input type="radio" id="make_offer_no" name="make-offer"
+        label for='make_offer_no' No
+    .field.left
+      label = t('xxx_www.通用.地址')
+      .input
+        = render 'google_map_for_publish'
+    .field.right
+      label = t('xxx_www.通用.是否公开')
+      .input
+        input type="radio" id="public_ok" name="mmt-public" checked='checked'
+        label for='public_ok' Yes
+        input type="radio" id="public_no" name="mmt-public"
+        label for='public_no' No
+    .field
+      #google-map.map
+    .field
+      label = t('xxx_www.通用.类别')
+      .input
+        = select_tag :category_id, options_from_collection_for_select(Category.all, :id, :name)
+    .field
+      = submit_tag t('xxx_www.通用.提交')
+    .clear-fix
+
+- content_for :require_external_js do
+  script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWP3zdmZ1lraIuEI9QH31kZbXVLm99MLA"
+
+- content_for :page_js do
+  javascript:
+    $(function() {
+      page__shared__google_map_for_publish.init();
+      Opal.QiniuUploader.$new();
+    });

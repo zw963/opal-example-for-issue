@@ -1,0 +1,50 @@
+doctype html
+html
+  head
+    = title_tag
+    meta charset="utf-8"
+    meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui"
+    meta name="apple-mobile-web-app-capable" content="yes"
+    meta name="apple-mobile-web-app-status-bar-style" content="black"
+
+    - if request.headers['HTTP_USER_AGENT'] =~ /iPhone/
+      meta http-equiv="Content-Security-Policy" content="connect-src * ws://*; default-src 'self' data: gap://ready file:; style-src * 'unsafe-inline'; font-src *; script-src * 'unsafe-inline' 'unsafe-eval' ws: wss:; media-src *; img-src * data: content:;"
+    - elsif request.headers['HTTP_USER_AGENT'] =~ /Android/
+      meta http-equiv="Content-Security-Policy" content="connect-src * ws://*; default-src 'self' data: https://ssl.gstatic.com; style-src * 'unsafe-inline'; font-src *; script-src * 'unsafe-inline' 'unsafe-eval'; media-src *; img-src * data: content:;"
+
+    meta name="format-detection" content="telephone=no"
+    meta name="msapplication-tap-highlight" content="no"
+    = csrf_meta_tags
+    = stylesheet_link_tag    'xxx_m/application', media: 'all'
+    = action_cable_meta_tag
+
+  body.layout-null.theme-lightblue [
+    class=html_body_classes
+    data-current-user-jpush-token=current_user.try(:jpush_token)
+    data-locale=cookies[:locale]
+    data-f7-modal-title=t('app.名称')
+    data-f7-modal-button-ok=t('framework7.modal.button.ok')
+    data-f7-modal-button-cancel=t('framework7.modal.button.cancel')
+  ]
+    / <!-- Status bar overlay for full screen mode (PhoneGap) -->
+    .statusbar-overlay
+    / <!-- Panels overlay-->
+    .panel-overlay
+    = render 'search'
+    / <!-- Views -->
+    .views
+      / <!-- Your main view, should have "view-main" class -->
+      .view.view-main
+        = yield
+
+    = render 'popup_my_qrcode'
+    = render 'popup_edit_comment'
+    = render 'popup_login'
+    = render 'popup_register_success'
+    = render 'popup_user_agreement'
+    = render 'popup_privacy_agreement'
+    = render 'popup_delivery_address'
+    = render 'popup_not_allowed_info_reports'
+
+    / 加载应用 JS
+    = javascript_include_tag 'xxx_m/application'

@@ -1,0 +1,16 @@
+doctype html
+html
+  head
+    = title_tag
+    = meta_keywords_tag
+    = meta_description_tag
+    = csrf_meta_tags
+    = favicon_link_tag 'favicon_w'
+    = stylesheet_link_tag 'xxx_www/application', media: 'all'
+  body class="#{html_body_classes}"
+    = render 'header'
+    #main = yield
+    = render 'footer'
+    = yield :require_external_js
+    = javascript_include_tag 'xxx_www/application', skip_opal_loader: true
+    = yield :page_js

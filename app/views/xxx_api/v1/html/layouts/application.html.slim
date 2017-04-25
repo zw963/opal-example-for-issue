@@ -1,0 +1,28 @@
+doctype html
+html
+  head
+    = title_tag
+    meta charset="utf-8"
+    meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, minimal-ui"
+
+    - if request.headers['HTTP_USER_AGENT'] =~ /iPhone/
+      meta http-equiv="Content-Security-Policy" content="connect-src * ws://*; default-src *; style-src * 'unsafe-inline'; font-src *; script-src * 'unsafe-inline' 'unsafe-eval' ws: wss:; media-src *; img-src * data: content:;"
+    - elsif request.headers['HTTP_USER_AGENT'] =~ /Android/
+      meta http-equiv="Content-Security-Policy" content="connect-src * ws://*; default-src *; style-src * 'unsafe-inline'; font-src *; script-src * 'unsafe-inline' 'unsafe-eval'; media-src *; img-src * data: content:;"
+
+    = csrf_meta_tags
+    = stylesheet_link_tag    'xxx_api/v1/html/application', media: 'all'
+
+  body.layout-null.theme-lightblue [
+    class=html_body_classes
+    data-f7-modal-title=t('xxx_api.名称')
+    data-f7-modal-button-ok=t('framework7.modal.button.ok')
+    data-f7-modal-button-cancel=t('framework7.modal.button.cancel')
+    data-device-is-ios="#{'true' if ios_device?}"
+    data-device-is-android="#{'true' if android_device?}"
+  ]
+    .views
+      .view.view-main = yield
+    = javascript_include_tag 'xxx_api/v1/html/application'
+    = javascript_include_tag 'es6/zw963.es6', extname: false
+    = javascript_include_tag 'channels/app/customer_service_chat.es6', extname: false
